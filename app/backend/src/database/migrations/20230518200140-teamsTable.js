@@ -17,3 +17,5 @@ module.exports = {
    await queryInterface.dropTable('teams')
   }
 };
+
+//teste 
