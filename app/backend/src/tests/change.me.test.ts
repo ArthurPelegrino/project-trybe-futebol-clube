@@ -4,42 +4,48 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
+import TeamsModel from '../database/models/TeamsModel';
+import TeamsService from '../database/services/TeamsService'
 
 import { Response } from 'superagent';
+import Teams from '../database/models/TeamsModel';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Seu teste', () => {
-  /**
-   * Exemplo do uso de stubs com tipos
-   */
+const teamsMock = [
+  {
+    "id": 1,
+    "teamName": "Avaí/Kindermann"
+  },
+  {
+    "id": 2,
+    "teamName": "Bahia"
+  },
+  {
+    "id": 3,
+    "teamName": "Botafogo"
+  }
+]
 
-  // let chaiHttpResponse: Response;
-
-  // before(async () => {
-  //   sinon
-  //     .stub(Example, "findOne")
-  //     .resolves({
-  //       ...<Seu mock>
-  //     } as Example);
-  // });
-
-  // after(()=>{
-  //   (Example.findOne as sinon.SinonStub).restore();
-  // })
-
-  // it('...', async () => {
-  //   chaiHttpResponse = await chai
-  //      .request(app)
-  //      ...
-
-  //   expect(...)
-  // });
-
-  it('Seu sub-teste', () => {
-    expect(false).to.be.eq(true);
+describe('findAll test', () => {
+  afterEach(() => {
+    sinon.restore()
+  })
+  describe('retornando um banco de dados vazio', () => {
+    it('retorna um array vazio', async () => {
+      sinon.stub(TeamsModel, 'findAll').resolves([])
+      const teams = await TeamsService.findAll();
+      expect(teams).to.be.deep.equal([])
+    })
+  })
+  describe('caso com bando populado', () => {
+    it('retorna um array populado', async () => {
+      sinon.stub(TeamsModel, 'findAll').resolves(teamsMock as any)
+      const teams = await TeamsService.findAll();
+      expect(teams).to.be.deep.equal(teamsMock)
+    })
   });
+  afterEach(sinon.restore);
 });
