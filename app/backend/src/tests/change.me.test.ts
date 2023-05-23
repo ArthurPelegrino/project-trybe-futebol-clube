@@ -50,12 +50,12 @@ describe('findAll test, camada service', () => {
   afterEach(sinon.restore);
 });
 
-describe('findAll test, camada controller', () => {
-  it('retorna status e json esperados', async () => {
-    const req = {};
-    const res = {};
+// describe('findAll test, camada controller', () => {
+//   it('retorna status e json esperados', async () => {
+//     const req = {};
+//     const res = {};
 
-    sinon.stub(TeamsService, 'findAll')
-    .resolves({type: null, message: teamsMock})
-  })
-})
+//     sinon.stub(TeamsService, 'findAll')
+//     .resolves({type: null, message: teamsMock})
+//   })
+// })
