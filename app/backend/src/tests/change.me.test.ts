@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import TeamsModel from '../database/models/TeamsModel';
-import TeamsService from '../database/services/TeamsService'
+import TeamsService from '../services/TeamsService'
 
 import { Response } from 'superagent';
 import Teams from '../database/models/TeamsModel';
@@ -29,7 +29,7 @@ const teamsMock = [
   }
 ]
 
-describe('findAll test', () => {
+describe('findAll test, camada service', () => {
   afterEach(() => {
     sinon.restore()
   })
@@ -49,3 +49,13 @@ describe('findAll test', () => {
   });
   afterEach(sinon.restore);
 });
+
+describe('findAll test, camada controller', () => {
+  it('retorna status e json esperados', async () => {
+    const req = {};
+    const res = {};
+
+    sinon.stub(TeamsService, 'findAll')
+    .resolves({type: null, message: teamsMock})
+  })
+})

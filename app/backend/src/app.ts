@@ -1,6 +1,6 @@
 import * as express from 'express';
 // import teamsRouter from './database/routes/TeamRouter';
-import router from './database/routes';
+import router from './routes';
 
 class App {
   public app: express.Express;
