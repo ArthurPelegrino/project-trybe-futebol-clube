@@ -1,11 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '.';
 
-// export type UsersAttributes = {
-//   id: number;
-//   teamName: string;
-// };
-
 class Users extends Model {
   declare id: number;
   declare username: string;
@@ -29,6 +24,7 @@ Users.init({
   },
   email: {
     type: DataTypes.STRING,
+    unique: true,
   },
   password: {
     type: DataTypes.STRING,
