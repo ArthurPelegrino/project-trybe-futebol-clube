@@ -1,6 +1,6 @@
 import { verify, sign, Secret, SignOptions } from 'jsonwebtoken';
 
-const secretKey: Secret = process.env.JWT_SECRET || 'something';
+const secretKey: Secret = process.env.JWT_SECRET as string;
 
 const configJWT: SignOptions = {
   expiresIn: '3d',
