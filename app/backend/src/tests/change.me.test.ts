@@ -47,7 +47,6 @@ describe('findAll test, camada service', () => {
       expect(teams).to.be.deep.equal(teamsMock)
     })
   });
-  afterEach(sinon.restore);
 });
 
 // describe('findAll test, camada controller', () => {

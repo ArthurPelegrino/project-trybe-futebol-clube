@@ -7,8 +7,7 @@ export const emailAndPasswordFields = (req: Request, res: Response, next: NextFu
   if (!email || !password) {
     return res.status(400).json({ message: 'All fields must be filled' });
   }
-
-  return next();
+  next();
 };
 
 export const validFormatEmailAndPassword = (req: Request, res: Response, next: NextFunction) => {
@@ -16,5 +15,5 @@ export const validFormatEmailAndPassword = (req: Request, res: Response, next: N
   if (!emailRegex.test(email) || password.length < 6) {
     return res.status(401).json({ message: 'Invalid email or password' });
   }
-  return next();
+  next();
 };
