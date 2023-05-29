@@ -21,6 +21,16 @@ class LoginService {
 
     return userFound as Users;
   }
+
+  static async getByRole(email: string) {
+    const user = await Users.findOne({
+      where: { email },
+    });
+    if (!user) {
+      throw new Error();
+    }
+    return user;
+  }
 }
 
 export default LoginService;

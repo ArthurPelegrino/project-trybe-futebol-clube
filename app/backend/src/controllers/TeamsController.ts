@@ -9,7 +9,7 @@ class TeamsController {
 
       return res.status(200).json(teams);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       throw new Error('Erro ao buscar times');
     }
   }

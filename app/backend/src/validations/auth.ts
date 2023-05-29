@@ -7,7 +7,12 @@ const configJWT: SignOptions = {
   algorithm: 'HS256',
 };
 
-export const generateToken = (payload:string) => {
+export interface tokenParams {
+  email: string;
+  role: string;
+}
+
+export const generateToken = (payload: tokenParams) => {
   const token = sign({ payload }, secretKey, configJWT);
   return token;
 };

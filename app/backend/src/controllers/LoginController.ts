@@ -13,11 +13,18 @@ class LoginController {
       const { email, password } = req.body;
 
       const user = await LoginService.logIn(email, password);
-      const token = generateToken(user.email);
+      console.log('@@@@@@@@@@@@@@@@@@#####', user);
+      const token = generateToken({ email: user.dataValues.email, role: user.dataValues.role });
       return res.status(200).json({ token });
     } catch (error) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
+  }
+
+  static async getRole(req: Request, res: Response): Promise<Response> {
+    const { token } = req.body.user;
+    console.log('token', token);
+    return res.status(200).json({ role: token.payload.role });
   }
 }
 
