@@ -13,7 +13,7 @@ class LoginController {
       const { email, password } = req.body;
 
       const user = await LoginService.logIn(email, password);
-      console.log('@@@@@@@@@@@@@@@@@@#####', user);
+      // console.log('@@@@@@@@@@@@@@@@@@#####', user);
       const token = generateToken({ email: user.dataValues.email, role: user.dataValues.role });
       return res.status(200).json({ token });
     } catch (error) {
@@ -23,7 +23,7 @@ class LoginController {
 
   static async getRole(req: Request, res: Response): Promise<Response> {
     const { token } = req.body.user;
-    console.log('token', token);
+    // console.log('token', token);
     return res.status(200).json({ role: token.payload.role });
   }
 }

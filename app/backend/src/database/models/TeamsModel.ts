@@ -4,6 +4,7 @@ import sequelize from '.';
 export type TeamsAttributes = {
   id: number;
   teamName: string;
+  // inProgress?: boolean
 };
 
 class Teams extends Model {
