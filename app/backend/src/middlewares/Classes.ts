@@ -7,6 +7,8 @@ class TeamDataClass {
   totalLosses: number;
   goalsFavor: number;
   goalsOwn: number;
+  goalsBalance: number;
+  efficiency: string;
   constructor(
     team: string,
   ) {
@@ -18,6 +20,8 @@ class TeamDataClass {
     this.totalLosses = 0;
     this.goalsFavor = 0;
     this.goalsOwn = 0;
+    this.goalsBalance = 0;
+    this.efficiency = '0';
   }
 }
 
