@@ -2,7 +2,7 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-
+import * as bcrypt from 'bcryptjs';
 import { app } from '../app';
 // import { generateToken } from '../validations/auth';
 
@@ -23,25 +23,37 @@ const userMock = {
     email: 'admin@admin.com',
     password: 'secret_admin',
   }
+  let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6IlVzZXIiLCJyb2xlIjoidXNlciIsImVtYWlsIjoidXNlckB1c2VyLmNvbSIsInBhc3N3b3JkIjoiJDJhJDA4JFk4QWJpOGpYdnNYeXFtLnJtcDBCLnVRQkE1cVV6N1Q2R2hsZy9DdlZyL2dMeFlqNVVBWlZPIn0sImlhdCI6MTY3MDUzNTE0MywiZXhwIjoxNjcwNjIxNTQzfQ.l7K-nivevzF8qKZEQl9lQzY2FcfU9mdTrawI0dTFmY8`
+  const createTokenMock = async () => {
+    let response: Response;
+    sinon
+        .stub(Users, "findOne")
+        .resolves(userMock as Users);
+    sinon.stub(bcrypt, 'compareSync').returns(true);
+    response = await chai.request(app).post('/login').send({
+        email: 'admin@admin.com',
+        password: 'secret_admin'
+    });
+    return response.body.token;
+  }
 describe('camada de login', () => {
+  let response: Response
   afterEach(() => {
     sinon.restore()
   })
+  beforeEach(async () => {
+    sinon
+      .stub(Users, "findOne")
+      .resolves(userMock as Users);
+  });
   describe('testando a rota de login', () => {
-    // it('vendo se é possível logar um usuário', async () => {
-    //     sinon.stub(LoginController, 'logon').resolves('asdasdasdasd')
-    //     const { body, status } = await chai.request(app)
-    //       .post('/login')
-    //       .send({
-    //         email: 'admin@admin.com',
-    //         password: 'secret_admin',
-    //       });
-      
-    //     expect(status).to.be.equal(200);
-    //     expect(body).to.be.deep.equal({
-    //       token: 'mockedToken',
-    //     });
-    //   });
+    it('vendo se é possível logar um usuário', async () => {
+        sinon.stub(bcrypt, 'compareSync').returns(true);
+        response = await chai.request(app).post('/login').send(userMock);
+        expect(response.status).to.be.equal(401);
+        token = response.body.token;
+
+      });
     it('retorna erro se corpo de email estiver vazio', async () => {
         const { body, status } = await chai.request(app).post('/login')
         .send({
@@ -82,4 +94,18 @@ describe('camada de login', () => {
         expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
       })
   })
+  describe('testando a loginservice', async () => {
+    afterEach(() => {
+      sinon.restore();
+    })
+    it('testando se função getByRole retorna um usuário', async () => {
+        const userMock = { email: 'usuario@example.com', role: 'admin' };
+      
+        sinon.stub(Users, 'findOne').resolves(userMock as Users);
+      
+        const result = await LoginService.getByRole('usuario@example.com');
+      
+        expect(result).to.be.deep.equal(userMock);
+      });
+  });
 })

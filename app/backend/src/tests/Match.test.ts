@@ -4,6 +4,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import { app } from '../app'
 import MatchesModel, { MatchAttributes } from '../database/models/MatchesModel';
+import MatchesService from '../services/MatchService';
 
 chai.use(chaiHttp);
 
@@ -64,5 +65,41 @@ describe('testando a rota /matches', () => {
       expect(body).to.be.deep.equal(match);
     });
   });
-//   
+  describe('POST', () => {
+    afterEach(() => {
+      sinon.restore();
+    })
+    const newMatch = {
+      id: 1,
+      homeTeamId: 16,
+      homeTeamGoals: 2,
+      awayTeamId: 8,
+      awayTeamGoals: 2,
+      inProgress: true,
+    };
+    const newMatchBody = {
+      homeTeamId: 16,
+      awayTeamId: 8, 
+      homeTeamGoals: 2,
+      awayTeamGoals: 2,
+    };
+    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAdXNlci5jb20iLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTY4NDMzNTU2MCwiZXhwIjoxNjg0NTk0NzYwfQ.
+    QieacH1Ti1L9pKORenmQ7EC9eKnXBD9zqBuL9FPaCeU`;
+    it('testando método addMatch', async () => {
+      sinon.stub(MatchesService, 'registerGame').resolves({
+        id: 49,
+        homeTeamId: 16,
+        homeTeamGoals: 2,
+        awayTeamId: 8,
+        awayTeamGoals: 2,
+        inProgress: true,
+      } as unknown as MatchesModel);
+
+      const { status, body } = await chai.request(app).post('/matches').send(newMatchBody).set('Authorization', token)
+        .send(newMatchBody);
+
+      expect(status).to.be.equal(201);
+      expect(body).to.be.deep.equal(newMatch);
+    });
+  });
 });
