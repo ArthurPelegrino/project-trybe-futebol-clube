@@ -23,7 +23,7 @@ const userMock = {
     email: 'admin@admin.com',
     password: 'secret_admin',
   }
-  let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6IlVzZXIiLCJyb2xlIjoidXNlciIsImVtYWlsIjoidXNlckB1c2VyLmNvbSIsInBhc3N3b3JkIjoiJDJhJDA4JFk4QWJpOGpYdnNYeXFtLnJtcDBCLnVRQkE1cVV6N1Q2R2hsZy9DdlZyL2dMeFlqNVVBWlZPIn0sImlhdCI6MTY3MDUzNTE0MywiZXhwIjoxNjcwNjIxNTQzfQ.l7K-nivevzF8qKZEQl9lQzY2FcfU9mdTrawI0dTFmY8`
+  let token = `aB3xk8Ft9R`
   const createTokenMock = async () => {
     let response: Response;
     sinon

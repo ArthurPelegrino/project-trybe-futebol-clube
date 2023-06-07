@@ -83,8 +83,7 @@ describe('testando a rota /matches', () => {
       homeTeamGoals: 2,
       awayTeamGoals: 2,
     };
-    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAdXNlci5jb20iLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTY4NDMzNTU2MCwiZXhwIjoxNjg0NTk0NzYwfQ.
-    QieacH1Ti1L9pKORenmQ7EC9eKnXBD9zqBuL9FPaCeU`;
+    // const token = `aB3xk8Ft9R`;
     it('testando método addMatch', async () => {
       sinon.stub(MatchesService, 'registerGame').resolves({
         id: 49,
@@ -95,7 +94,7 @@ describe('testando a rota /matches', () => {
         inProgress: true,
       } as unknown as MatchesModel);
 
-      const { status, body } = await chai.request(app).post('/matches').send(newMatchBody).set('Authorization', token)
+      const { status, body } = await chai.request(app).post('/matches').send(newMatchBody)
         .send(newMatchBody);
 
       expect(status).to.be.equal(201);

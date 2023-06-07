@@ -61,22 +61,25 @@ class LeaderboardService {
     });
   }
 
-  static async findHomeTeams(): Promise<TeamDataInterface[]> {
-    const matches = await Matches.findAll({
-      where: {
-        inProgress: false,
-      },
-      attributes: ['homeTeamId', 'homeTeamGoals', 'awayTeamGoals'],
-      include: [{
-        model: Teams,
-        as: 'homeTeam',
-        attributes: ['teamName'],
-      }],
-    }) as unknown as HomeTeamInfo[];
-    const homeTeamsName = await this.getHomeTeamsName(matches);
-    const fullData = await this.getData(homeTeamsName, matches);
-    this.mySort(fullData);
-    return fullData;
+  static async findTeams(): Promise<TeamDataInterface[]> {
+    const homeTeamTable = await this.findHomeTeams();
+    const awayTeamsTable = await this.findAwaysTeam();
+    const fullData: TeamDataInterface[] = [];
+    homeTeamTable.forEach((ht) => {
+      const f = new TeamDataClass(ht.name);
+      awayTeamsTable.map((a) => {
+        if (ht.name === a.name) {
+          f.name = ht.name; f.efficiency = ''; f.totalPoints = ht.totalPoints + a.totalPoints;
+          f.totalGames = ht.totalGames + a.totalGames; f.totalDraws = ht.totalDraws + a.totalDraws;
+          f.totalLosses = ht.totalLosses + a.totalLosses;
+          f.totalVictories = ht.totalVictories + a.totalVictories;
+          f.goalsFavor = ht.goalsFavor + a.goalsFavor; f.goalsOwn = ht.goalsOwn + a.goalsOwn;
+          f.goalsBalance = ht.goalsBalance + a.goalsBalance;
+        } f.efficiency = ((f.totalPoints / (f.totalGames * 3)) * 100).toFixed(2);
+        return null;
+      }); fullData.push(f);
+    });
+    this.mySort(fullData); return fullData;
   }
 
   static async getData(teamName: string[], matches: HomeTeamInfo[]): Promise<TeamDataInterface[]> {
@@ -97,6 +100,24 @@ class LeaderboardService {
       });
       fullData.push(d);
     });
+    return fullData;
+  }
+
+  static async findHomeTeams(): Promise<TeamDataInterface[]> {
+    const matches = await Matches.findAll({
+      where: {
+        inProgress: false,
+      },
+      attributes: ['homeTeamId', 'homeTeamGoals', 'awayTeamGoals'],
+      include: [{
+        model: Teams,
+        as: 'homeTeam',
+        attributes: ['teamName'],
+      }],
+    }) as unknown as HomeTeamInfo[];
+    const homeTeamsName = await this.getHomeTeamsName(matches);
+    const fullData = await this.getData(homeTeamsName, matches);
+    this.mySort(fullData);
     return fullData;
   }
 
