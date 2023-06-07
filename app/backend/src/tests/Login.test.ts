@@ -4,11 +4,14 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import { generateToken } from '../validations/auth';
+// import { generateToken } from '../validations/auth';
 
 import { Response } from 'superagent';
 import Users from '../database/models/UsersModels';
 import LoginController from '../controllers/LoginController';
+import LoginService from '../services/LoginService'
+import { generateToken } from '../validations/auth';
+import { tokenValidation } from '../middlewares/middleware';
 
 chai.use(chaiHttp);
 
@@ -25,18 +28,20 @@ describe('camada de login', () => {
     sinon.restore()
   })
   describe('testando a rota de login', () => {
-    // it('vendo se é possível logar um usuario', async () => {
-    //     const {body, status } = await chai.request(app).post('/login')
-    //     .send({
+    // it('vendo se é possível logar um usuário', async () => {
+    //     sinon.stub(LoginController, 'logon').resolves('asdasdasdasd')
+    //     const { body, status } = await chai.request(app)
+    //       .post('/login')
+    //       .send({
     //         email: 'admin@admin.com',
     //         password: 'secret_admin',
-    //     })
-
+    //       });
+      
     //     expect(status).to.be.equal(200);
     //     expect(body).to.be.deep.equal({
-    //         token: ''
-    //     })
-    // })
+    //       token: 'mockedToken',
+    //     });
+    //   });
     it('retorna erro se corpo de email estiver vazio', async () => {
         const { body, status } = await chai.request(app).post('/login')
         .send({
